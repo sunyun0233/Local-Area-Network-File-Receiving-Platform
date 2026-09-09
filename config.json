@@ -1,0 +1,8 @@
+{
+  "host": "0.0.0.0",
+  "port": 8000,
+  "upload_dir": "uploads",
+  "max_file_size_mb": 10240,
+  "access_code": "",
+  "recent_limit": 50
+}

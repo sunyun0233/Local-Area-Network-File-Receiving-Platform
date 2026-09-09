@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-ark-theme="endfield" data-ark-depth="maximal" data-app-state="connecting">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#191919">
+  <title>FILE INTAKE · 局域网文件接收</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23191919'/><path d='M6 9h20M6 16h20M6 23h12' stroke='%23fffa00' stroke-width='3'/></svg>">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#sector-drop">跳到接收区</a>
+
+  <div class="ef-shell">
+    <header class="ef-topbar">
+      <a class="ef-brand" href="#sector-drop">
+        <span class="ef-brand-mark" aria-hidden="true"><i></i></span>
+        <span class="ef-brand-copy">
+          <strong>FILE INTAKE</strong>
+          <small>局域网文件接收</small>
+        </span>
+      </a>
+      <dl class="ef-topmeta" aria-label="连接状态">
+        <div class="ef-meta">
+          <dt>LINK</dt>
+          <dd id="link-state"><i class="ef-dot" aria-hidden="true"></i><span id="link-text">连接中</span></dd>
+        </div>
+        <div class="ef-meta">
+          <dt>PORT</dt>
+          <dd id="port-value">—</dd>
+        </div>
+        <div class="ef-meta ef-meta-node">
+          <dt>NODE</dt>
+          <dd id="node-value">—</dd>
+        </div>
+      </dl>
+    </header>
+
+    <nav class="ef-rail" aria-label="页面分区">
+      <a class="ef-rail-item" href="#sector-drop" aria-current="location">
+        <span class="ef-rail-num">01</span>
+        <span class="ef-rail-label">接收区</span>
+      </a>
+      <a class="ef-rail-item" href="#sector-queue">
+        <span class="ef-rail-num">02</span>
+        <span class="ef-rail-label">传输队列</span>
+      </a>
+      <a class="ef-rail-item" href="#sector-archive">
+        <span class="ef-rail-num">03</span>
+        <span class="ef-rail-label">接收归档</span>
+      </a>
+      <p class="ef-rail-foot" aria-hidden="true">INTK<br>TERMINAL</p>
+    </nav>
+
+    <main class="ef-main">
+      <!-- 01 接收区 -->
+      <section class="ef-sector ef-sector-drop is-in" id="sector-drop" aria-labelledby="drop-title" data-reveal>
+        <div class="ef-sector-heading">
+          <p class="ef-kicker"><span>01</span>FIELD RECEIVE · 现场接收</p>
+          <h1 class="ef-title" id="drop-title">
+            <span class="ef-title-latin">TRANSFER</span>
+            <span class="ef-title-cjk">把文件送到这里</span>
+          </h1>
+          <p class="ef-lead">同一局域网内的电脑或手机可直接发送，文件将保存到本机
+            <code class="ef-code-inline" id="dir-value">uploads</code> 目录。</p>
+        </div>
+
+        <div class="ef-dropstage">
+          <div class="ef-drop" id="drop-zone" role="button" tabindex="0"
+               aria-label="选择或拖入文件，发送到本机">
+            <svg class="ef-drop-mark" viewBox="0 0 48 48" fill="none" aria-hidden="true"
+                 stroke="currentColor" stroke-width="1.5" stroke-linecap="square">
+              <path d="M24 31V12M24 12l-7 7m7-7 7 7"/>
+              <path d="M10 34v2a4 4 0 0 0 4 4h20a4 4 0 0 0 4-4v-2"/>
+            </svg>
+            <p class="ef-drop-title"><span class="ef-drop-main">选择文件 / 拖入本区域</span>
+              <span class="ef-drop-over">松开即开始排队</span></p>
+            <p class="ef-drop-sub">ACCEPT · 支持多选 · 上限 <b id="max-value">—</b></p>
+            <input type="file" id="file-input" multiple hidden>
+          </div>
+          <div class="ef-stage-side" aria-hidden="true">
+            <span class="ef-stage-side-rule"></span>
+            <span class="ef-stage-side-index">A-01</span>
+            <span class="ef-stage-side-cell ef-stage-side-cell-b"></span>
+            <span class="ef-stage-side-cell ef-stage-side-cell-c"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 02 传输队列 -->
+      <section class="ef-sector ef-dock" id="sector-queue" aria-labelledby="queue-title" data-reveal>
+        <header class="ef-sector-head">
+          <div>
+            <p class="ef-kicker ef-kicker-light"><span>02</span>TRANSFER QUEUE · 传输队列</p>
+            <h2 class="ef-sector-title" id="queue-title">待发送文件
+              <span class="ef-count" id="queue-count">0</span>
+            </h2>
+          </div>
+          <p class="ef-cap-note" id="cap-note">单次总量上限 10240 MB</p>
+        </header>
+
+        <div class="ef-queue" id="queue-card">
+          <ol id="queue-list" class="ef-queue-list">
+            <li class="ef-empty">NO FILES · 队列为空，先在上方添加文件</li>
+          </ol>
+        </div>
+
+        <div class="ef-code-row" id="access-card" hidden>
+          <label for="access-code">ACCESS CODE · 访问码</label>
+          <input type="password" id="access-code" placeholder="输入服务器设置的访问码" autocomplete="off">
+        </div>
+
+        <div class="ef-dockbar">
+          <p class="ef-state" id="state-line" role="status" aria-live="polite">
+            <span class="ef-state-dot" aria-hidden="true"></span>STANDBY · 就绪，等待文件
+          </p>
+          <div class="ef-dock-actions">
+            <button type="button" class="ef-btn ef-btn-ghost" id="clear-btn" disabled>清空队列</button>
+            <button type="button" class="ef-btn ef-btn-primary" id="upload-btn" disabled>
+              <span class="ef-btn-copy">开始传输</span>
+              <span class="ef-btn-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 03 接收归档 -->
+      <section class="ef-sector ef-sector-archive" id="sector-archive" aria-labelledby="archive-title" data-reveal>
+        <div class="ef-archive-main">
+          <header class="ef-sector-head">
+            <div>
+              <p class="ef-kicker"><span>03</span>RECEIVE ARCHIVE · 接收归档</p>
+              <h2 class="ef-sector-title" id="archive-title">最近接收
+                <span class="ef-count" id="archive-count">0</span>
+              </h2>
+            </div>
+            <p class="ef-archive-note">LIVE INDEX · 每 5 秒刷新</p>
+          </header>
+          <ul class="ef-archive-list" id="archive-list">
+            <li class="ef-empty">EMPTY · 暂无接收记录</li>
+          </ul>
+        </div>
+
+        <aside class="ef-scan" id="sector-scan" aria-label="手机扫码访问">
+          <p class="ef-kicker"><span>QR</span>MOBILE LINK · 扫码打开</p>
+          <div class="ef-qr" role="img" aria-label="访问页面的二维码">
+            <img id="qr-img" alt="本机访问地址二维码">
+          </div>
+          <p class="ef-url" id="access-url">—</p>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="ef-foot">
+      <span>FILE INTAKE / LOCAL AREA NETWORK</span>
+      <span id="foot-dir">保存目录 uploads</span>
+    </footer>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
